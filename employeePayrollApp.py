@@ -27,11 +27,21 @@ inventory = {}
 
 @app.get("/")
 def home():
+    """"
+    Description: Showing Welcome msg
+    Return: Welcome msg
+    """
     return {"Welcome in Employee Payroll App"}
 
 
 @app.post("/create-user/{user_id}")
 def create_user(user_id: int, user: User):
+    """"
+    Description: Creating user according to give data
+    :param user: creating object of user
+    :type user_id: giving user id
+    Return: string
+    """
     if user_id in inventory:
         return {"Error": "Item Id already exists "}
     inventory[user_id] = {"Name": user.name, "Gender": user.gender, "Department": user.department,
@@ -41,11 +51,21 @@ def create_user(user_id: int, user: User):
 
 @app.get("/dashboard")
 def dashboard():
+    """"
+    Description: Showing Users data
+    Return: Dictionary
+    """
     return inventory
 
 
 @app.put("/update-item/{user_id}")
 def update_user(user_id: int, user: User):
+    """"
+    Description: Updating user data
+    :param user: accessing object of user
+    :type user_id: giving user id 
+    Return: string
+    """
     if user_id not in inventory:
         return {"Error": "Not Found"}
     if user.name is not None:
