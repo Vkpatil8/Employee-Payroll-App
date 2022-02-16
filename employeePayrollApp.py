@@ -5,7 +5,7 @@
 @Last Modified time: 16-02-2022 20:30:00
 @Title : create app for Employee Payroll App
 """
-import pydantic
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, validator
 from typing import Optional
@@ -41,7 +41,7 @@ class User(BaseModel):
 
     @validator("department")
     @classmethod
-    def gender_valid(cls, department):
+    def department_valid(cls, department):
         """
         Description: Showing Welcome msg
         :type department: department input for checking
