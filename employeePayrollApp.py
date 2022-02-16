@@ -30,7 +30,7 @@ class User(BaseModel):
     @classmethod
     def gender_valid(cls, gender):
         """
-        Description: Showing Welcome msg
+        Description: checking validation of gender
         :type gender: Gender input for checking
         Return: gender object or http exception
         """
@@ -43,7 +43,7 @@ class User(BaseModel):
     @classmethod
     def department_valid(cls, department):
         """
-        Description: Showing Welcome msg
+        Description: checking validation of department
         :type department: department input for checking
         Return: department object or http exception
         """
