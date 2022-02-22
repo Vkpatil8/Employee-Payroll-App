@@ -6,7 +6,6 @@
 @Title : create app for Employee Payroll App
 """
 
-
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -65,7 +64,7 @@ def home():
 
 
 @app.get("/dashboard")
-def all(db: Session = Depends(get_db)):
+def all_users(db: Session = Depends(get_db)):
     """
     Description: Showing Users data
     Return: Dictionary
@@ -76,17 +75,17 @@ def all(db: Session = Depends(get_db)):
 
 
 @app.post("/create-user/{user_id}")
-def create_user(user_id: int, user: User, val: User = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def create_user(user_id: int, user: User, auth: User = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     """
     Description: Creating user according to give data
     :param db:
-    :param val:
+    :param auth: for authentication
     :param user: creating object of user
     :type user_id: giving user id
     Return: string
     """
-    new_user = model.User(id=user_id, name=user.name, gender=user.gender, department=user.department, salary=user.salary
-                          , start_date=user.start_date, notes=user.notes)
+    new_user = model.User(id=user_id, name=user.name, gender=user.gender, department=user.department,
+                          salary=user.salary, start_date=user.start_date, notes=user.notes)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
@@ -94,8 +93,9 @@ def create_user(user_id: int, user: User, val: User = Depends(oauth2_scheme), db
 
 
 @app.delete('/delete/{user_id}')
-def delete(user_id: int, db: Session = Depends(get_db)):
+def delete(user_id: int, auth: User = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     """
+    :param auth: for authentication
     :param user_id:
     :param db: get data from database
     :return: string
@@ -111,6 +111,13 @@ def delete(user_id: int, db: Session = Depends(get_db)):
 
 @app.put('/update/{user_id}', status_code=status.HTTP_202_ACCEPTED)
 def update(user_id: int, user1: User, auth: User = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """
+    :param user_id: get user id
+    :param user1: create users object
+    :param auth: for authentication
+    :param db: data base connection
+    :return: string
+    """
     user = db.query(model.User).filter(model.User.id == user_id)
     if not user.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"user with id {user_id} not found")
